@@ -1,4 +1,4 @@
-package head
+package header
 
 import (
 	"encoding/binary"
