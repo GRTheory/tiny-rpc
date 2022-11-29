@@ -94,7 +94,7 @@ func (r *RequestHeader) ResetHeaer() {
 
 type ResponseHeader struct {
 	sync.RWMutex
-	compressType compressor.CompressType
+	CompressType compressor.CompressType
 	ID           uint64
 	Error        string
 	ResponseLen  uint32
@@ -107,7 +107,7 @@ func (r *ResponseHeader) Marshal() []byte {
 	idx := 0
 	header := make([]byte, MaxHeaderSize+len(r.Error))
 
-	binary.LittleEndian.PutUint16(header[idx:], uint16(r.compressType))
+	binary.LittleEndian.PutUint16(header[idx:], uint16(r.CompressType))
 	idx += Uint16Size
 
 	idx += binary.PutUvarint(header[idx:], r.ID)
@@ -133,7 +133,7 @@ func (r *ResponseHeader) Unmarshal(data []byte) (err error) {
 	}()
 
 	idx, size := 0, 0
-	r.compressType = compressor.CompressType(r.compressType)
+	r.CompressType = compressor.CompressType(r.CompressType)
 	idx += Uint16Size
 
 	r.ID, size = binary.Uvarint(data[idx:])
@@ -153,7 +153,7 @@ func (r *ResponseHeader) Unmarshal(data []byte) (err error) {
 func (r *ResponseHeader) GetCompressType() compressor.CompressType {
 	r.RLock()
 	defer r.RUnlock()
-	return compressor.CompressType(r.compressType)
+	return compressor.CompressType(r.CompressType)
 }
 
 func (r *ResponseHeader) ResetHeader() {
@@ -161,7 +161,7 @@ func (r *ResponseHeader) ResetHeader() {
 	defer r.Unlock()
 	r.Error = ""
 	r.ID = 0
-	r.compressType = 0
+	r.CompressType = 0
 	r.Checksum = 0
 	r.ResponseLen = 0
 }
