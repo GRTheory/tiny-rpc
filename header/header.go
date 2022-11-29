@@ -15,7 +15,7 @@ const (
 	Uint16Size = 2
 )
 
-var UnmarshalError = errors.New("an error occurred in Unmarshal")
+var ErrorUnmarshal = errors.New("an error occurred in Unmarshal")
 
 type RequestHeader struct {
 	sync.RWMutex
@@ -50,12 +50,12 @@ func (r *RequestHeader) Unmarshal(data []byte) (err error) {
 	r.Lock()
 	defer r.Unlock()
 	if len(data) == 0 {
-		return UnmarshalError
+		return ErrorUnmarshal
 	}
 
 	defer func() {
 		if r := recover(); r != nil {
-			err = UnmarshalError
+			err = ErrorUnmarshal
 		}
 	}()
 	idx, size := 0, 0
@@ -123,12 +123,12 @@ func (r *ResponseHeader) Unmarshal(data []byte) (err error) {
 	r.Lock()
 	defer r.Unlock()
 	if len(data) == 0 {
-		return UnmarshalError
+		return ErrorUnmarshal
 	}
 
 	defer func() {
 		if r := recover(); r != nil {
-			err = UnmarshalError
+			err = ErrorUnmarshal
 		}
 	}()
 
